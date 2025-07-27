@@ -1,4 +1,3 @@
-# utils.py
 import math, random
 
 def find_nearest(agent, others):
