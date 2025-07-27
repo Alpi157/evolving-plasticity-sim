@@ -1,4 +1,3 @@
-# main.py
 import os, csv, random, numpy as np
 import config
 from creature import Forager, THETA_LEN
@@ -7,12 +6,10 @@ from world    import World
 from visualize import run_demo    # For manual playback
 
 def main():
-    # ----- user chooses demo generations -------------------------------
     chk_raw = input("Enter generation checkpoints (e.g. 1,5,10): ")
     checkpoints = sorted({
         int(x) for x in chk_raw.replace(" ", "").split(",") if x.isdigit()
     })
-    # -------------------------------------------------------------------
 
     os.makedirs(config.LOG_DIR,    exist_ok=True)
     os.makedirs(config.PLOTS_DIR,  exist_ok=True)
@@ -27,7 +24,7 @@ def main():
 
     world = World()  # persistent environment
 
-    # ---- CSV log for normal generation stats ----
+
     with open(os.path.join(config.LOG_DIR, "stats_log.csv"), "w", newline="") as fcsv, \
          open(os.path.join(config.LOG_DIR, "postshift_log.csv"), "w", newline="") as fshift:
 
@@ -58,14 +55,14 @@ def main():
 
             print(f"Gen {gen:4d} | best: {stats['best_fitness']:.2f} | avg: {stats['avg_fitness']:.2f}")
 
-            # === SHIFT DETECTION ===
+
             if did_shift:
                 print(f"\n[ENV SHIFT] at Generation {gen} – starting post-shift adaptation log\n")
                 shift_mode = True
                 postshift_counter = 0
                 shift_id += 1
 
-            # === LOG POST-SHIFT EPISODES ===
+
             if shift_mode:
                 shift_writer.writerow({
                     "shift_id": shift_id,
@@ -77,12 +74,10 @@ def main():
                 if postshift_counter >= 10:
                     shift_mode = False
 
-            # ------------- DEMO ---------------------------------------
             if gen in checkpoints:
                 input(f"\nPress Enter to watch Generation {gen} ...")
                 run_demo(population, world)
                 print("Demo finished.\n")
-            # ----------------------------------------------------------
 
             # save genomes
             if gen % config.SAVE_INTERVAL == 0 or gen == config.NUM_GENERATIONS:
@@ -97,7 +92,6 @@ def main():
 
     print("Evolution complete. Logs saved to", config.LOG_DIR)
 
-# ---------------- sanity check ---------------------------------------------
 if __name__ == "__main__":
     main()
 
