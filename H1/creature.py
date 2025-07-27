@@ -4,7 +4,6 @@ import numpy as np
 import config
 from neural_net import Brain
 
-# ---- length of θ slice ------------------------------------------------------
 THETA_LEN = (
     config.HIDDEN_SIZE * config.NUM_SENSORS +
     config.HIDDEN_SIZE +
@@ -12,11 +11,8 @@ THETA_LEN = (
     config.NUM_OUTPUTS
 )
 
-# -----------------------------------------------------------------------------
 class Creature:
-    """
-    Genome layout = [ theta_0 | eta | lambda | hebb_toggle ]
-    """
+
     def __init__(self, x, y, genome=None):
         self.x, self.y = x, y
 
@@ -31,9 +27,6 @@ class Creature:
         self.e_trace = np.zeros(THETA_LEN)
         self.total_reward = 0.0
 
-    # -------------------------------------------------------------------------
-
-    # -------------------------------------------------------------------------
     def step(self, world, learning_module):
         """
         One time-step loop:
@@ -81,14 +74,12 @@ class Creature:
         self.theta0, self.eta, self.lmbda, self.hebb = self._decode_genome(g)
         self.brain = Brain(self.theta0)
 
-    # -------------------------------------------------------------------------
     def reset(self, x, y):
         self.x, self.y = x, y
         self.total_reward = 0.0
         self.e_trace[:] = 0
         self.brain = Brain(self.theta0)
 
-    # ==================== SENSING & ACTION ===================================
     def sense(self, world):
         """
         9-element feature vector:
@@ -135,7 +126,6 @@ class Creature:
         out = self.brain(obs)
         return int(torch.argmax(out).item())
 
-# -----------------------------------------------------------------------------
 class Forager(Creature):
     """Specialised agent (no extra behaviour yet)."""
     pass
