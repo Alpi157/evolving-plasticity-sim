@@ -1,20 +1,17 @@
-# visualize.py
 import pygame
 import config
 from world import World
 from creature import Forager
 
-# --- simple colors ----------------------------------------------------------
 WALL   = (60, 60, 60)
 FOOD   = (0, 180, 0)
 AGENT  = (0, 120, 255)
 BLACK  = (0, 0, 0)
 
-TILE   = 8          # pixel size of each grid cell
-FPS    = 30         # animation speed
-STEPS  = 300        # how long to run the demo
+TILE   = 8          
+FPS    = 30         
+STEPS  = 300        
 
-# ---------------------------------------------------------------------------
 def draw(window: pygame.Surface, world: World, agents: list[Forager]):
     window.fill(BLACK)
     # walls
@@ -41,7 +38,6 @@ def draw(window: pygame.Surface, world: World, agents: list[Forager]):
         )
     pygame.display.flip()
 
-# ---------------------------------------------------------------------------
 def run_demo(population: list[Forager], world: World):
     pygame.init()
     win = pygame.display.set_mode(
