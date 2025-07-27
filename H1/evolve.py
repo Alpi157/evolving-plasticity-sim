@@ -6,7 +6,6 @@ from creature import Forager, THETA_LEN
 from learning import LearningModule
 from neural_net import Brain
 
-# ---------- GA helpers (unchanged) ------------------------------------------
 def crossover(g1, g2):
     mask = np.random.rand(*g1.shape) < config.CROSSOVER_RATE
     return np.where(mask, g1, g2)
@@ -19,7 +18,6 @@ def mutate(g):
 def select_parents(pop, fits):
     k = max(2, int(len(pop) * config.ELITISM_RATE))
     return [pop[i] for i in np.argsort(fits)[-k:]]
-# ----------------------------------------------------------------------------
 
 def breed(parents, target_size):
     kids = []
@@ -32,22 +30,18 @@ def breed(parents, target_size):
         kids.append(child)
     return kids
 
-# ----------------------------------------------------------------------------
 def run_generation(population, world):
-    """
-    Evaluate each agent in its **own cloned world** so food removal by one
-    individual does not disadvantage the next.
-    """
+
     fitnesses = []
 
     for parent in population:
-        # clone parent genome into fresh agent
+
         x0, y0 = random.randrange(config.WORLD_WIDTH), random.randrange(config.WORLD_HEIGHT)
         agent = Forager(x0, y0)
         agent.set_genome(parent.genome.copy())
         agent.reset(x0, y0)
 
-        # --- use a deep copy of the world ---
+
         wcopy = world.clone()
 
         learner = LearningModule()
@@ -66,10 +60,7 @@ def run_generation(population, world):
     }
 
 def evaluate_population(population, world):
-    """
-    Returns average fitness of current population in the given world
-    (cloned per agent).  No genomes are modified.
-    """
+
     scores = []
     learner = LearningModule()
     for parent in population:
