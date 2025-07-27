@@ -8,7 +8,6 @@ class LearningModule:
         self.gamma = config.GAMMA
         self.theta_len = THETA_LEN
 
-    # -------------------------------------------------------------------------
     def learn(self, creature, prev_obs, action, reward, new_obs):
         """
         TD(λ) or Hebbian update applied **in-place** to PyTorch parameters.
@@ -37,12 +36,12 @@ class LearningModule:
 
         # choose update rule
         delta = (
-            creature.eta * td_err * creature.e_trace            # TD(λ)
+            creature.eta * td_err * creature.e_trace            # TD
             if creature.hebb == 0
             else creature.eta * grads                           # Hebbian
         )
 
-        # --- apply delta to both genome slice and live PyTorch params ----------
+
         creature.genome[:self.theta_len] += delta
         creature.theta0 += delta  # keep theta0 in sync
 
