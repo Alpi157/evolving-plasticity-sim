@@ -1,14 +1,8 @@
-# world.py
-# Defines the gridworld environment, including maze generation, resource placement, and periodic shifts.
-
 import numpy as np
 import random
 import config
 
 class World:
-    """
-    Represents a 2D grid world with walls (maze) and food resources that periodically reshuffle.
-    """
     def __init__(self):
         self.width  = config.WORLD_WIDTH
         self.height = config.WORLD_HEIGHT
@@ -17,7 +11,6 @@ class World:
         self.generations_since_shift = 0
         self.regenerate()
 
-    # -------------------------------------------------------------------------
     def clone(self):
         """
         Return a deep copy of the world so that each agent can be evaluated
@@ -33,7 +26,6 @@ class World:
         new.generations_since_shift = self.generations_since_shift
         return new
 
-    # -------------------------------------------------------------------------
     def regenerate(self):
         self.generate_maze()
         self.spawn_food()
@@ -43,10 +35,7 @@ class World:
         self.just_shifted = True
 
     def step_generation(self):
-        """
-        Advance the generation counter; if it's time, regenerate environment.
-        Call once per evolutionary generation.
-        """
+
         self.generations_since_shift += 1
         if self.generations_since_shift >= self.shift_interval:
             self.regenerate()
@@ -54,9 +43,6 @@ class World:
             self.just_shifted = False
 
     def generate_maze(self):
-        """
-        Carve a random DFS maze into a grid of walls (1) and free spaces (0).
-        """
         rows = (self.height - 1) // 2
         cols = (self.width  - 1) // 2
         # Start with all walls
@@ -91,9 +77,6 @@ class World:
                     self.grid[y, x] = 0
 
     def spawn_food(self):
-        """
-        Randomly place clusters of food items on free tiles.
-        """
         self.food = set()
         for _ in range(config.NUM_FOOD_CLUSTERS):
             # Choose cluster center
@@ -111,9 +94,6 @@ class World:
                     placed += 1
 
     def is_free(self, x, y):
-        """
-        Check if a tile is free (within bounds and not a wall).
-        """
         return (0 <= x < self.width
                 and 0 <= y < self.height
                 and self.grid[y, x] == 0)
